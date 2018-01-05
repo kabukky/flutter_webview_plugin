@@ -124,7 +124,7 @@ static NSString *const CHANNEL_NAME = @"flutter_webview_plugin";
         [channel invokeMethod:@"onBackPressed" arguments:nil];
     else {
         id data = @{@"url": request.URL.absoluteString};
-        BOOL shouldLoad = YES;
+        __block BOOL shouldLoad = YES;
         dispatch_semaphore_t sema = dispatch_semaphore_create(0);
         [channel invokeMethod:@"onUrlChanged" arguments:data result:^(FlutterResult fResult) {
             shouldLoad = NO;
