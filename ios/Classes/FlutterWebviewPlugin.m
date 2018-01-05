@@ -124,14 +124,13 @@ static NSString *const CHANNEL_NAME = @"flutter_webview_plugin";
         [channel invokeMethod:@"onBackPressed" arguments:nil];
     else {
         id data = @{@"url": request.URL.absoluteString};
-        __block BOOL shouldLoad = YES;
-        dispatch_semaphore_t sema = dispatch_semaphore_create(0);
+        __block BOOL shouldLoad = NO;
+        __block BOOL finished = NO;
         [channel invokeMethod:@"onUrlChanged" arguments:data result:^(FlutterResult fResult) {
             shouldLoad = YES;
-            dispatch_semaphore_signal(sema);
+            finished = YES;
         }];
-        //dispatch_semaphore_wait(sema, DISPATCH_TIME_FOREVER);
-        //dispatch_release(sema);
+        while (!finished);
         return shouldLoad;
     }
     
