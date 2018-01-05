@@ -130,7 +130,7 @@ static NSString *const CHANNEL_NAME = @"flutter_webview_plugin";
             shouldLoad = YES;
             dispatch_semaphore_signal(sema);
         }];
-        dispatch_semaphore_wait(sema, DISPATCH_TIME_FOREVER);
+        //dispatch_semaphore_wait(sema, DISPATCH_TIME_FOREVER);
         //dispatch_release(sema);
         return shouldLoad;
     }
