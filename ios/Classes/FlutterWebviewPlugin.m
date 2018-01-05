@@ -127,11 +127,11 @@ static NSString *const CHANNEL_NAME = @"flutter_webview_plugin";
         BOOL shouldLoad = YES;
         dispatch_semaphore_t sema = dispatch_semaphore_create(0);
         [channel invokeMethod:@"onUrlChanged" arguments:data result:^(FlutterResult fResult) {
-            self.shouldLoad = NO;
+            shouldLoad = NO;
             dispatch_semaphore_signal(sema);
         }];
         dispatch_semaphore_wait(sema, DISPATCH_TIME_FOREVER);
-        dispatch_release(sema);
+        //dispatch_release(sema);
         return shouldLoad;
     }
     
