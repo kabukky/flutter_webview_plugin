@@ -120,12 +120,19 @@ static NSString *const CHANNEL_NAME = @"flutter_webview_plugin";
                 @"type": @"shouldStart",
                 @"navigationType": [NSNumber numberWithInt:navigationType]};
     [channel invokeMethod:@"onState" arguments:data];
-    
     if (navigationType == UIWebViewNavigationTypeBackForward)
         [channel invokeMethod:@"onBackPressed" arguments:nil];
     else {
         id data = @{@"url": request.URL.absoluteString};
-        [channel invokeMethod:@"onUrlChanged" arguments:data];
+        BOOL shouldLoad = YES;
+        dispatch_semaphore_t sema = dispatch_semaphore_create(0);
+        [channel invokeMethod:@"onUrlChanged" arguments:data result:^(FlutterResult fResult) {
+            self.shouldLoad = NO;
+            dispatch_semaphore_signal(sema);
+        }];
+        dispatch_semaphore_wait(sema, DISPATCH_TIME_FOREVER);
+        dispatch_release(sema);
+        return shouldLoad;
     }
     
     if (_enableAppScheme)
